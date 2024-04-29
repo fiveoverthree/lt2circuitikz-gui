@@ -1,3 +1,12 @@
+# ADDED a simple GUI.
+just run
+```
+pip install -r requirements.txt
+python gui.py
+```
+And copy the generated Latex files.
+
+
 # LT2circuiTikz conversion script
 
 ## What this script does
