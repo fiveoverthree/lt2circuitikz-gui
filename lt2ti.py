@@ -4,6 +4,7 @@ import math;
 import copy;
 import os;
 import configparser;
+import io;
 
 class lt2circuiTikz:
     
@@ -885,27 +886,17 @@ class lt2circuiTikz:
             hdestination.write(line);
         fhs.close();               
     
-    def writeCircuiTikz(self, outfile):
-        print('Writing Tex commands to "'+outfile+'"...')
+    def writeCircuiTikz(self) -> str:
         xscale = 1 * self.lt2tscale;
         yscale = -1 * self.lt2tscale; # y is inverse for LTspice files
         xoffset = 0;
         yoffset = 0;
         
-        fhd = open(outfile, mode='w', newline='\r\n'); # prevent automatic newline conversion to have more control over nl chars.
-        
+        #fhd = open(outfile, mode='w', newline='\r\n'); # prevent automatic newline conversion to have more control over nl chars.
+        fhd = io.StringIO()
+
         if (self.includepreamble):
             self.copyFileContentsToHandle(self.scriptdir+os.sep+ self.symfilebasepath+'latex_preamble.tex', fhd);
-            
-            if (self.config.has_option('general','latexincludes')):
-                incfiles = self.config.get('general','latexincludes');
-                
-                incfiles = incfiles.split(';');
-                for incfile in incfiles:
-                    srcfile = self.scriptdir+os.sep+ self.symfilebasepath + incfile;
-                    dstfile = os.path.dirname(os.path.abspath(outfile)) +os.sep + os.path.basename(incfile);
-                    self.copyFile(srcfile, dstfile)
-                    print('    copying latexincludes: "'+srcfile+'" to "'+dstfile+'" ...')
             
             
         if (self.config.has_option('general','bipoles_length')):
@@ -1029,9 +1020,10 @@ class lt2circuiTikz:
         if (self.includepreamble):
             self.copyFileContentsToHandle(self.scriptdir+os.sep+ self.symfilebasepath+'latex_closing.tex', fhd);
 
-        fhd.close();
-        print("Done.");
-        return;
+        fhd.seek(0)
+
+        # Read the content from the buffer
+        return fhd.read()
 
 
 
