@@ -4,7 +4,7 @@ just run
 pip install -r requirements.txt
 python gui.py
 ```
-And copy the generated Latex files.
+And copy the generated source code.
 
 
 # LT2circuiTikz conversion script
